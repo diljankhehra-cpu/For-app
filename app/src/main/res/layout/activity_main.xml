@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,20 +7,7 @@
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/playerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        app:use_controller="true"/>
 
-    <TextView
-        android:id="@+id/channelNumber"
-        android:textColor="#FFF"
-        android:textSize="30sp"
-        android:layout_margin="20dp"
-        android:visibility="gone"
-        android:layout_gravity="top|right"/>
-
-    <TextView
-        android:id="@+id/bufferText"
-        android:textColor="#FFF"
-        android:textSize="20sp"
-        android:layout_margin="20dp"
-        android:layout_gravity="bottom|left"/>
 </FrameLayout>
