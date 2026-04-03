@@ -4,6 +4,7 @@
 
     <application
         android:label="IPTV"
+        android:usesCleartextTraffic="true"
         android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
 
         <activity
