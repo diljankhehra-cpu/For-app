@@ -2,22 +2,17 @@ package com.iptv;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.exoplayer2.*;
 import com.google.android.exoplayer2.ui.PlayerView;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
-
 public class MainActivity extends AppCompatActivity {
 
     PlayerView playerView;
     ExoPlayer player;
-
-    String M3U_URL = "https://iptv-org.github.io/iptv/index.m3u";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,47 +21,32 @@ public class MainActivity extends AppCompatActivity {
 
         playerView = findViewById(R.id.playerView);
 
+        // Player init
         player = new ExoPlayer.Builder(this).build();
         playerView.setPlayer(player);
 
-        loadFirstChannel();
-    }
+        // 🔥 TEST STREAM (100% working)
+        String url = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
 
-    void loadFirstChannel(){
-        new Thread(() -> {
-            try {
-                URL url = new URL(M3U_URL);
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(url.openStream())
-                );
+        MediaItem item = MediaItem.fromUri(Uri.parse(url));
+        player.setMediaItem(item);
+        player.prepare();
+        player.setPlayWhenReady(true);
 
-                String line;
-
-                while((line = reader.readLine()) != null){
-                    if(line.startsWith("http")){
-                        playStream(line);
-                        break; // first channel hi load karna
-                    }
-                }
-
-            } catch (Exception e){
-                e.printStackTrace();
+        // 🔥 Error listener (debug)
+        player.addListener(new Player.Listener() {
+            @Override
+            public void onPlayerError(PlaybackException error) {
+                Toast.makeText(MainActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
             }
-        }).start();
-    }
-
-    void playStream(String url){
-        runOnUiThread(() -> {
-            MediaItem item = MediaItem.fromUri(Uri.parse(url));
-            player.setMediaItem(item);
-            player.prepare();
-            player.play();
         });
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        player.release();
+        if(player != null){
+            player.release();
+        }
     }
 }
